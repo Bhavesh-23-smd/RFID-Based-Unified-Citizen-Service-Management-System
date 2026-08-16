@@ -25,42 +25,7 @@ The codebase is structured modularly to separate the low-level peripheral driver
 
 ---
 
-## 🗺️ System Workflow & Program Flow
-
-Below is the operational state flow of the firmware. It handles RFID scanning, identifies user roles, processes secure authentications, and branches out to specific application modules.
-
-```mermaid
-graph TD
-    Start([System Boot & EEPROM Init]) --> Welcome[Display Welcome Banner]
-    Welcome --> WaitScan{Waiting for RFID Scan}
-    
-    WaitScan -->|Scan Failed / Invalid Card| ErrorState[Trigger Red LED + Buzzer / Access Denied]
-    ErrorState --> Welcome
-    
-    WaitScan -->|Valid Citizen Card| CardBlockCheck{Is Card Blocked in EEPROM?}
-    CardBlockCheck -->|Yes| ErrorState
-    CardBlockCheck -->|No| LoginVerify{Login PIN Verification}
-    
-    LoginVerify -->|Failed 3 Times| LockOut[Display Locked Card State] --> Welcome
-    LoginVerify -->|Success| CitizenMenu[Citizen Main Menu]
-    
-    CitizenMenu --> PAN[1. PAN Details Display]
-    CitizenMenu --> ATM[2. ATM Portal]
-    CitizenMenu --> Vote[3. Voting Panel]
-    CitizenMenu --> DL[4. Driving License Viewer]
-    CitizenMenu --> PwdChg[6. Change PIN Portal]
-    CitizenMenu --> Logout[5. Exit Session]
-    
-    PAN & ATM & Vote & DL & PwdChg --> CitizenMenu
-    Logout --> Welcome
-    
-    WaitScan -->|Officer Master Card| OfficerBeep[Green LED + Beep] --> OfficerMenu[Officer Main Menu]
-    OfficerMenu --> BlockAdmin[Block / Unblock Citizens]
-    OfficerMenu --> ClockEdit[Adjust System RTC Clock]
-    OfficerMenu --> OffExit[Exit Admin Session] --> Welcome
-```
-
-### Main Program Flow Chart
+## 🗺️ Main Program Flow Chart
 Here is the detailed sequential logic executed by the main program:
 
 ![Main Program Flow](./Main%20Program%20Flow.png)
