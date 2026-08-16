@@ -11,9 +11,23 @@ By scanning a unique citizen RFID card, authenticated users can access their Ban
 
 ---
 
-## 🗺️ System Workflow Architecture
+## 📐 System Architecture & Design
 
-Below is the operational state flow of the system. It handles RFID scanning, identifies user roles, processes secure authentications, and branches out to specific application modules.
+### High-Level Block Diagram
+The overall system layout connects the main controller block to various sensors, displays, inputs, and memory storage.
+
+![System Block Diagram](./Block%20Diagram.png)
+
+### Software & Firmware Architecture
+The codebase is structured modularly to separate the low-level peripheral drivers (UART, SPI, Keypad, LCD, RTC) from the high-level application menus.
+
+![Software Architecture](./Software%20Architecture.png)
+
+---
+
+## 🗺️ System Workflow & Program Flow
+
+Below is the operational state flow of the firmware. It handles RFID scanning, identifies user roles, processes secure authentications, and branches out to specific application modules.
 
 ```mermaid
 graph TD
@@ -46,6 +60,21 @@ graph TD
     OfficerMenu --> OffExit[Exit Admin Session] --> Welcome
 ```
 
+### Main Program Flow Chart
+Here is the detailed sequential logic executed by the main program:
+
+![Main Program Flow](./Main%20Program%20Flow.png)
+
+### User Menu Navigation Tree
+The interactive menu system branches out logically depending on user keystrokes:
+
+![Menu Structure](./Menu%20Structure.png)
+
+### Firmware Modules & Responsibilities
+Each C file is compiled and linked with specific functional responsibilities to form the unified binary:
+
+![Modules and Responsibilities](./Modules%20%26%20Responsibilits.png)
+
 ---
 
 ## ✨ System Features in Detail
@@ -77,9 +106,13 @@ graph TD
 
 ---
 
-## 🗄️ SPI EEPROM Memory Mapping (AT25LC512)
+## 🗄️ EEPROM Storage & Memory Mapping (AT25LC512)
 
-The system relies on an external **AT25LC512 (512Kbit / 64KB)** EEPROM over SPI0. Below is the mapping map designed to keep system parameters persistent across power cycles:
+The system relies on an external **AT25LC512 (512Kbit / 64KB)** EEPROM over SPI0 to maintain persistent user states.
+
+![Data Storage Layout](./Data%20Storage.png)
+
+Below is the mapping map designed to keep system parameters persistent across power cycles:
 
 | Hex Memory Address | Data Field description | Default Value / Boot Configuration |
 | :--- | :--- | :--- |
@@ -109,11 +142,16 @@ The system relies on an external **AT25LC512 (512Kbit / 64KB)** EEPROM over SPI0
 *   **Asynchronous Interrupt Handler:** Leverages the LPC2148 UART0 RX line interrupt (`UART0_ISR` mapped in VIC slot 5) to intercept RFID frames on the fly without blocking execution. 
 *   **Framing Delimiters:** Incoming RFID streams are parsed between the standard Serial Start-of-Text (`STX = 0x02`) and End-of-Text (`ETX = 0x03`) bytes to ensure packet transmission integrity.
 
-### 2. LCD Driver (8-Bit Mode)
+### 2. Interrupt Management
+The Vectored Interrupt Controller (VIC) maps incoming hardware triggers efficiently (e.g., UART0 and EINT3):
+
+![Interrupts Usage](./Interrpts%20use.png)
+
+### 3. LCD Driver (8-Bit Mode)
 *   **Layout:** Operates in 8-bit bus configuration utilizing pins `P0.8 - P0.15` for data and control pins `P0.16` (RS), `P0.17` (R/W), and `P0.18` (EN).
 *   **CGRAM Interface:** Contains functions to reprogram the internal CGRAM tables of the LCD display on-the-fly, allowing graphics manipulation of custom display metrics.
 
-### 3. SPI0 Engine & Sakamoto's Calendaring
+### 4. SPI0 Engine & Sakamoto's Calendaring
 *   **SPI0 Init:** Standard 8-bit write-only/read SPI routines mapped directly to hardware peripheral registers (`S0SPCR`, `S0SPSR`, `S0SPDR`).
 *   **Sakamoto's Algorithm:** Integrated mathematically to keep the RTC day register (`DOW`) calculated dynamically when administrative edits occur:
     ```c
@@ -125,41 +163,38 @@ The system relies on an external **AT25LC512 (512Kbit / 64KB)** EEPROM over SPI0
 
 ---
 
-## 🔩 Hardware Pin Interface Map
+## 🔌 Hardware Setup & Connections
 
-```
-                     LPC2148 Microcontroller
-                 ┌─────────────────────────────┐
-                 │                             │
-    RFID (RX) ──>│ P0.1 (RxD0)                 │
-                 │                             │
-    EEPROM (SPI) │                             │
-         MISO <──│ P0.5 (MISO0)                │
-         MOSI ──>│ P0.6 (MOSI0)                │
-          SCK <──│ P0.4 (SCK0)                 │
-                 │                             │
-     LCD Bus     │                             │
-      Data 0-7 ──│ P0.8 - P0.15                │
-      RS/RW/EN ──│ P0.16, P0.17, P0.18         │
-                 │                             │
-     Keypad Rows │                             │
-           0-3 ──│ P0.22 - P0.25 (Inputs)      │
-     Keypad Cols │                             │
-           0-3 ──│ P0.12 - P0.15 (Outputs)     │
-                 │                             │
-    Indicators   │                             │
-       Buzzer <──│ P0.19                       │
-      Red LED <──│ P0.20                       │
-    Green LED <──│ P0.21                       │
-                 │                             │
-  RTC Int (SW) ──│ P0.30 (EINT3 Input)         │
-                 └─────────────────────────────┘
-```
+### Development Board Components
+The physical board interfaces a matrix keypad, character LCD, Buzzer, and LEDs:
+
+![Hardware Components](./Hardware%20Components.png)
+
+### Schematic & Circuit Details
+Below are the schematic wiring diagrams showing terminal connections:
+
+![Circuit Details](./Circuit%20Details.png)
+
+### Power Supply Hookups
+Ensure proper voltage regulation when hooking up the modules:
+
+![Power Supply Connection](./Power%20Supply%20%20Connection.png)
+
+### Microcontroller Pin Mapping Diagram
+Detailed physical pin connections on the LPC2148 LQFP package:
+
+![Pin Connection](./Pin%20Connection.png)
 
 ---
 
-## 🚀 Compilation & Deployment Guidelines
+## 🚀 Compilation & Development Environment
 
+### Keil Development Platform Setup
+Compile and debug the code using Keil Microcontroller Development Kit (MDK):
+
+![Development Platform](./Develompet%20Platform.png)
+
+### Deployment Guidelines:
 1. **Prerequisites:**
    *   **Keil uVision IDE v4 or v5** installed with legacy support for the **ARM7 LPC2000** family.
    *   **Flash Magic Utility** (installed for serial programming over UART0).
