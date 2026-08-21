@@ -135,6 +135,24 @@ The physical board interfaces a matrix keypad, character LCD, Buzzer, and LEDs:
 
 ![Hardware Components](./New%20images/kit%20image.jpeg)
 
+### Project Hardware Showcase
+The following images demonstrate the physical hardware running various modules of the unified system on the ARM7 development board:
+
+**1. System Boot & RFID Scan Screen**  
+![RFID Scan Screen](./New%20images/image%202.png)
+
+**2. Officer Master Card Recognition**  
+![Officer Authentication](./New%20images/image%203.png)
+
+**3. Administrator Officer Menu**  
+![Officer Menu](./New%20images/image%204.png)
+
+**4. Citizen Card Validation**  
+![Citizen Validation](./New%20images/image%205.png)
+
+**5. Main Citizen Services Menu**  
+![Citizen Services Menu](./New%20images/image%206.png)
+
 ### Schematic & Circuit Details
 Below are the schematic wiring diagrams showing terminal connections:
 
