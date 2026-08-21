@@ -21,7 +21,7 @@ The overall system layout connects the main controller block to various sensors,
 ### Software & Firmware Architecture
 The codebase is structured modularly to separate the low-level peripheral drivers (UART, SPI, Keypad, LCD, RTC) from the high-level application menus.
 
-<img src="Projectimage./software rfid image.png" alt="Photo" width="500">
+<img src="Projectimage./software rfid image.png" alt="Photo" width="800">
 
 ---
 
