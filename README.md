@@ -16,29 +16,29 @@ By scanning a unique citizen RFID card, authenticated users can access their Ban
 ### High-Level Block Diagram
 The overall system layout connects the main controller block to various sensors, displays, inputs, and memory storage.
 
-<img src="Projectimage./Block diagram in RFID.png" width="900">
+![System Block Diagram](./New%20images/Block%20diagram%20in%20RFID.png)
 
 ### Software & Firmware Architecture
 The codebase is structured modularly to separate the low-level peripheral drivers (UART, SPI, Keypad, LCD, RTC) from the high-level application menus.
 
-<img src="Projectimage./software rfid image.png" alt="Photo" width="800">
+![Software Architecture](./New%20images/software%20rfid%20image.png)
 
 ---
 
 ## 🗺️ Main Program Flow Chart
 Here is the detailed sequential logic executed by the main program:
 
-![Main Program Flow](./Main%20Program%20Flow.png)
+![Main Program Flow](./New%20images/Main%20Program%20Flow%20Chart%20RFID.png)
 
 ### User Menu Navigation Tree
 The interactive menu system branches out logically depending on user keystrokes:
 
-![Menu Structure](./Menu%20Structure.png)
+![Menu Structure](./New%20images/user%20menu%20image.png)
 
 ### Firmware Modules & Responsibilities
 Each C file is compiled and linked with specific functional responsibilities to form the unified binary:
 
-![Modules and Responsibilities](./Modules%20%26%20Responsibilits.png)
+![Modules and Responsibilities](./New%20images/Modules%20menu.png)
 
 ---
 
@@ -75,7 +75,7 @@ Each C file is compiled and linked with specific functional responsibilities to 
 
 The system relies on an external **AT25LC512 (512Kbit / 64KB)** EEPROM over SPI0 to maintain persistent user states.
 
-![Data Storage Layout](./Data%20Storage.png)
+![Data Storage Layout](./New%20images/Data%20storage.png)
 
 Below is the mapping map designed to keep system parameters persistent across power cycles:
 
@@ -110,7 +110,7 @@ Below is the mapping map designed to keep system parameters persistent across po
 ### 2. Interrupt Management
 The Vectored Interrupt Controller (VIC) maps incoming hardware triggers efficiently (e.g., UART0 and EINT3):
 
-![Interrupts Usage](./Interrpts%20use.png)
+![Interrupts Usage](./New%20images/Interrupts%20rfid.png)
 
 ### 3. LCD Driver (8-Bit Mode)
 *   **Layout:** Operates in 8-bit bus configuration utilizing pins `P0.8 - P0.15` for data and control pins `P0.16` (RS), `P0.17` (R/W), and `P0.18` (EN).
@@ -133,7 +133,7 @@ The Vectored Interrupt Controller (VIC) maps incoming hardware triggers efficien
 ### Development Board Components
 The physical board interfaces a matrix keypad, character LCD, Buzzer, and LEDs:
 
-![Hardware Components](./Hardware%20Components.png)
+![Hardware Components](./New%20images/kit%20image.jpeg)
 
 ### Schematic & Circuit Details
 Below are the schematic wiring diagrams showing terminal connections:
@@ -148,7 +148,7 @@ Ensure proper voltage regulation when hooking up the modules:
 ### Microcontroller Pin Mapping Diagram
 Detailed physical pin connections on the LPC2148 LQFP package:
 
-![Pin Connection](./Pin%20Connection.png)
+![Pin Connection](./New%20images/02_Pin_Connections.png)
 
 ---
 
@@ -157,7 +157,7 @@ Detailed physical pin connections on the LPC2148 LQFP package:
 ### Keil Development Platform Setup
 Compile and debug the code using Keil Microcontroller Development Kit (MDK):
 
-![Development Platform](./Develompet%20Platform.png)
+![Development Platform](./New%20images/Development%20Platform%20rfid.png)
 
 ### Deployment Guidelines:
 1. **Prerequisites:**
